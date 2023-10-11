@@ -1,0 +1,30 @@
+{
+    "name": "mediavisie-bv/marketing-api",
+    "type": "library",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "MediavisieBv\\MarketingApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jithran",
+            "email": "info@jithransikken.nl"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/*",
+            "options": {
+                "symlink": false
+            }
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.8",
+        "netresearch/jsonmapper": "^4.2"
+    },
+    "version": "1.0.0"
+}
