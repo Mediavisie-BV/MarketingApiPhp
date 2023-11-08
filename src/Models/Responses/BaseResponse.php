@@ -3,6 +3,6 @@
 namespace MediavisieBv\MarketingApi\Models\Responses;
 
 abstract class BaseResponse {
-    public bool $error;
-    public ?string $message = null;
+    public $error;
+    public $message = null;
 }

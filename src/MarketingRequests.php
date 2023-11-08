@@ -17,11 +17,12 @@ class MarketingRequests
 
     /**
      * @param string $endpoint
-     * @param array|null $data
-     * @return string
-     * @throws \Exception
+     * @param null $data
+     * @param string $method
+     * @return \stdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getData(string $endpoint, ?array $data = null) : \stdClass
+    public function executeRequest(string $endpoint, $data = null, string $method = 'GET') : \stdClass
     {
         // guzzle request
         $client = new Client($this->_guzzleConfigKeys);
@@ -29,8 +30,14 @@ class MarketingRequests
         // build headers
         $headers = $this->_buildHeaders();
 
-        $method = empty($data) ? 'GET' : 'POST';
-        $response = $client->request($method, $endpoint, ['headers' => $headers]);
+        $options = [
+            'headers' => $headers
+        ];
+        if($method === 'POST' || $method === 'PUT') {
+            $options['body'] = json_encode($data);
+        }
+
+        $response = $client->request($method, $endpoint, $options);
 
         if($response->getStatusCode() !== 200) {
             throw new \Exception('Error: ' . $response->getStatusCode());

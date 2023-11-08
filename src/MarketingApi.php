@@ -2,20 +2,27 @@
 
 namespace MediavisieBv\MarketingApi;
 
+use MediavisieBv\MarketingApi\Models\Responses\MessageResponse;
+use MediavisieBv\MarketingApi\Traits\AttributesTrait;
 use MediavisieBv\MarketingApi\Traits\SubscriptionsTrait;
 
 class MarketingApi
 {
-    use SubscriptionsTrait;
+    use SubscriptionsTrait, AttributesTrait;
 
-    private string $_apiEndpoint;
-    private string $_apiToken;
+    private $_apiEndpoint;
+    private $_apiToken;
 
-    private ?array $_guzzleConfigKeys = null;
+    private $_guzzleConfigKeys = null;
 
+    /**
+     * @param string $apiEndpoint
+     * @param string $apiToken
+     * @throws \Exception
+     */
     public function __construct(string $apiEndpoint, string $apiToken)
     {
-        // normalize the enpoint url
+        // normalize the endpoint url
         if (!str_ends_with($apiEndpoint, '/')) {
             $apiEndpoint .= '/';
         }
@@ -29,20 +36,36 @@ class MarketingApi
         $this->_apiToken = $apiToken;
     }
 
-    public function setConfigKeys(string $key, mixed $value): void
+    public function setConfigKeys(string $key, $value): void
     {
         $this->_guzzleConfigKeys[$key] = $value;
     }
 
     /**
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getData(string $endpoint, ?array $data = null)
+    public function getData(string $endpoint, ?array $data = null, $method="GET")
     {
-        $request = new MarketingRequests($this->_getApiToken(), $this->_guzzleConfigKeys);
+        $request = new MarketingRequests($this->_getApiToken(), (array)$this->_guzzleConfigKeys);
         try {
             // strip leading slash from the given endpoint
-            return $request->getData($this->_getApiEndpoint(ltrim($endpoint, '/')), $data);
+            return $request->executeRequest($this->_getApiEndpoint(ltrim($endpoint, '/')), $data, $method);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
+     */
+    public function executeRequest(string $endpoint, $method, $data = null)
+    {
+        $request = new MarketingRequests($this->_getApiToken(), (array)$this->_guzzleConfigKeys);
+        try {
+            // strip leading slash from the given endpoint
+            return $request->executeRequest($this->_getApiEndpoint(ltrim($endpoint, '/')), $data, $method);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
