@@ -11,19 +11,18 @@ trait SubscriptionsTrait
 {
     /**
      * @return mixed|object|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getSubscriptions(): mixed
+    public function getSubscriptions()
     {
 
         try {
             $result = $this->getData('/v1/Subscription/Subscriptions');
-            if ($result->data === null) {
-                throw new \Exception('No subscriptions found');
-            }
             $jm = new JsonMapper();
+            $jm->bStrictNullTypes = false;
             $data = $jm->map($result, SubscriptionsResponse::class);
         } catch (\Exception $e) {
-            $data = SubscriptionsResponse::class;
+            $data = new SubscriptionsResponse();
             $data->error = true;
             $data->message = $e->getMessage();
         }
@@ -35,8 +34,9 @@ trait SubscriptionsTrait
     /**
      * @param $id
      * @return \MediavisieBv\MarketingApi\Models\Responses\SubscriptionResponse|mixed|object|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getSubscription($id): mixed
+    public function getSubscription($id)
     {
         try {
             // check if the given id is an uuid
