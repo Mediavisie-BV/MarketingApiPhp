@@ -2,13 +2,13 @@
 
 namespace MediavisieBv\MarketingApi;
 
-use MediavisieBv\MarketingApi\Models\Responses\MessageResponse;
 use MediavisieBv\MarketingApi\Traits\AttributesTrait;
+use MediavisieBv\MarketingApi\Traits\ProfilesTrait;
 use MediavisieBv\MarketingApi\Traits\SubscriptionsTrait;
 
 class MarketingApi
 {
-    use SubscriptionsTrait, AttributesTrait;
+    use SubscriptionsTrait, AttributesTrait, ProfilesTrait;
 
     private $_apiEndpoint;
     private $_apiToken;

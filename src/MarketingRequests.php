@@ -39,7 +39,7 @@ class MarketingRequests
 
         $response = $client->request($method, $endpoint, $options);
 
-        if($response->getStatusCode() !== 200) {
+        if($response->getStatusCode() >= 300) {
             throw new \Exception('Error: ' . $response->getStatusCode());
         }
 
