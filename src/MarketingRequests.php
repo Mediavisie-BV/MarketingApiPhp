@@ -6,8 +6,8 @@ use GuzzleHttp\Client;
 
 class MarketingRequests
 {
-    private string $_apiToken;
-    private array $_guzzleConfigKeys;
+    private $_apiToken;
+    private $_guzzleConfigKeys;
 
     public function __construct(string $apiToken, array $guzzleConfigKeys = [])
     {

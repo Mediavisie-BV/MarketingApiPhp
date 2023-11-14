@@ -13,15 +13,6 @@
             "email": "info@jithransikken.nl"
         }
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./packages/*",
-            "options": {
-                "symlink": false
-            }
-        }
-    ],
     "require": {
         "php": "^7.4|^8.0",
         "guzzlehttp/guzzle": "^7.8",
