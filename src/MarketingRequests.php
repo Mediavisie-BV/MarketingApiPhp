@@ -21,6 +21,7 @@ class MarketingRequests
      * @param string $method
      * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function executeRequest(string $endpoint, $data = null, string $method = 'GET') : \stdClass
     {
@@ -37,7 +38,15 @@ class MarketingRequests
             $options['body'] = json_encode($data);
         }
 
-        $response = $client->request($method, $endpoint, $options);
+        try {
+            $response = $client->request($method, $endpoint, $options);
+        } catch (\Exception $e) {
+            $response = new \stdClass();
+            $response->error = true;
+            $response->message = $e->getMessage();
+            $response->code = $e->getCode();
+            return $response;
+        }
 
         if($response->getStatusCode() >= 300) {
             throw new \Exception('Error: ' . $response->getStatusCode());

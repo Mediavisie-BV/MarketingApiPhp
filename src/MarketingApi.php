@@ -47,13 +47,7 @@ class MarketingApi
      */
     public function getData(string $endpoint, ?array $data = null, $method="GET")
     {
-        $request = new MarketingRequests($this->_getApiToken(), (array)$this->_guzzleConfigKeys);
-        try {
-            // strip leading slash from the given endpoint
-            return $request->executeRequest($this->_getApiEndpoint(ltrim($endpoint, '/')), $data, $method);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+        return $this->executeRequest($endpoint, $method, $data);
     }
 
     /**
@@ -63,12 +57,8 @@ class MarketingApi
     public function executeRequest(string $endpoint, $method, $data = null)
     {
         $request = new MarketingRequests($this->_getApiToken(), (array)$this->_guzzleConfigKeys);
-        try {
-            // strip leading slash from the given endpoint
-            return $request->executeRequest($this->_getApiEndpoint(ltrim($endpoint, '/')), $data, $method);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+        // strip leading slash from the given endpoint
+        return $request->executeRequest($this->_getApiEndpoint(ltrim($endpoint, '/')), $data, $method);
     }
 
     private function _getApiToken(): string
