@@ -59,4 +59,24 @@ trait ProfilesTrait
 
         return $data;
     }
+
+    public function updateProfile(string $guid, Profile $profile) {
+        $result = Support::returnIfNotIsUuid($guid);
+        if($result !== null) {
+            return $result;
+        }
+
+        try {
+            $result = $this->executeRequest('/v1/Profile/Profile/'.$guid, 'PUT', $profile);
+            $jm = new JsonMapper();
+            $jm->bStrictNullTypes = false;
+            $data = $jm->map($result, MessageResponse::class);
+        } catch (\Exception $e) {
+            $data = new MessageResponse();
+            $data->error = true;
+            $data->message = $e->getMessage();
+        }
+
+        return $data;
+    }
 }
